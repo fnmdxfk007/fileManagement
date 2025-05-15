@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.netdisk.mappers.FileCollectMapper">
+    <!--实体映射-->
+    <resultMap id="base_result_map" type="com.netdisk.entity.po.FileCollect">
+        <result column="user_id" property="userId"/>
+        <result column="collect_id" property="collectId"/>
+        <result column="file_id" property="fileId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!--查询用户收藏的文件ID-->
+    <select id="selectCollectedFileIds" resultType="string">
+        SELECT file_id FROM file_collect
+        WHERE user_id = #{userId}
+        AND file_id IN
+        <foreach collection="fileIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <!-- 批量插入收藏记录 -->
+    <insert id="setCollectFiles">
+        INSERT INTO file_collect (collect_id, user_id, file_id, create_time)
+        VALUES
+        <foreach collection="collects" item="c" separator=",">
+            (#{c.collectId}, #{c.userId}, #{c.fileId}, #{c.createTime})
+        </foreach>
+    </insert>
+
+    <!-- 批量删除收藏记录 -->
+    <delete id="delCollect">
+        DELETE FROM file_collect
+        WHERE user_id = #{userId}
+        AND file_id IN
+        <foreach collection="fileIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
