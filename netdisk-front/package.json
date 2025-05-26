@@ -19,6 +19,7 @@
     "highlight.js": "^11.9.0",
     "js-md5": "^0.8.3",
     "netdisk-front": "file:",
+    "pdfjs-dist": "^5.2.133",
     "sass": "^1.69.5",
     "sass-loader": "^13.3.2",
     "spark-md5": "^3.0.2",

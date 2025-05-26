@@ -175,7 +175,7 @@ public class CommonFileController extends ABaseController {
         }
         String filePath = appConfig.getProjectFolder() + Constants.FILE_FOLDER_FILE + downloadFileDto.getFilePath();
         String fileName = downloadFileDto.getFileName();
-        response.setContentType("application/x-msdownload; charset=UTF-8");
+        response.setContentType("application/octet-stream; charset=UTF-8");
         if (request.getHeader("User-Agent").toLowerCase().indexOf("msie") > 0) {//IE浏览器
             fileName = URLEncoder.encode(fileName, "UTF-8");
         } else {
@@ -240,7 +240,6 @@ public class CommonFileController extends ABaseController {
             response.getWriter().write("文件不存在");
             return;
         }
-        // 复用父类读文件方法
         readFile(response, filePath);
     }
 }
