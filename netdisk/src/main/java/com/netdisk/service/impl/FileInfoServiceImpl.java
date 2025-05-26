@@ -150,7 +150,6 @@ public class FileInfoServiceImpl implements FileInfoService {
             updateAllPermissionRecursively(fid, userId, permission, accessType, updateTime);
         }
     }
-
     /**
      * 递归更新自身和所有子节点的权限
      */

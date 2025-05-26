@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -257,7 +256,6 @@ public class FileInfoController extends CommonFileController {
                                @PathVariable("code") String code) throws Exception {
         super.publicDownload(request, response, code);
     }
-
 
     @RequestMapping("/delFile")
     @GlobalInterceptor(checkParams = true)

@@ -86,18 +86,14 @@ public class FileInfoVO {
         this.nickName = nickName;
     }
 
-    public void setPermission(){
+    public void setPermission(Integer permission){
         this.permission = permission;
     }
-
     public Integer getPermission() {
         return permission;
     }
 
-    public void setAccessType(){
-        this.accessType = accessType;
-    }
-
+    public void setAccessType(Integer accessType){ this.accessType = accessType; }
     public Integer getAccessType() {
         return accessType;
     }

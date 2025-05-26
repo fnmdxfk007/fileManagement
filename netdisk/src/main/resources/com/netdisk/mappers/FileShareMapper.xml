@@ -38,7 +38,7 @@
     <sql id="base_column_list">
         share_id
         ,s.file_id,s.user_id,valid_type,expire_time,
-		 share_time,code,show_count
+		 share_time,code,show_count, f.permission, f.access_type
     </sql>
 
     <sql id="base_condition_filed">
