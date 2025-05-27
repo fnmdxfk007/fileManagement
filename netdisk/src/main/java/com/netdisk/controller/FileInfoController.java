@@ -62,8 +62,8 @@ public class FileInfoController extends CommonFileController {
         if (null != categoryEnum) {
             query.setFileCategory(categoryEnum.getCategory());
         }
-        query.setPermission(1); // 公开文件
-        query.setAccessType(0); // 只读和下载权限
+        query.setPermission(1);
+        query.setAccessType(0);
         query.setOrderBy("last_update_time desc");
         query.setDelFlag(FileDelFlagEnums.USING.getFlag());
         PaginationResultVO<FileInfo> result = fileInfoService.loadPublicFileList(query);
@@ -76,14 +76,13 @@ public class FileInfoController extends CommonFileController {
     @RequestMapping("/loadCollectPublicFileList")
     @GlobalInterceptor(checkParams = true)
     public ResponseVO loadCollectPublicFileList(HttpSession session, FileInfoQuery query, String category) {
-        // 设置文件分类（如果有提供分类参数）
         FileCategoryEnums categoryEnum = FileCategoryEnums.getByCode(category);
         if (null != categoryEnum) {
             query.setFileCategory(categoryEnum.getCategory());
         }
         query.setUserId(getUserInfoFromSession(session).getUserId());
-        query.setPermission(1); // 公开文件
-        query.setAccessType(0); // 只读和下载权限
+        query.setPermission(1);
+        query.setAccessType(0);
         query.setOrderBy("last_update_time desc");
         query.setDelFlag(FileDelFlagEnums.USING.getFlag());
         // 分页查询
@@ -128,8 +127,6 @@ public class FileInfoController extends CommonFileController {
             throw new BusinessException("文件ID不能为空！");
         }
         SessionWebUserDto webUserDto = getUserInfoFromSession(session);
-        //System.out.println("前端fileId=" + fileId + ", session userId=" + webUserDto.getUserId());
-        // 调用服务层方法更新文件描述
         fileInfoService.updateFileDescription(fileId, webUserDto.getUserId(), description);
         return getSuccessResponseVO(null);
     }
@@ -242,18 +239,21 @@ public class FileInfoController extends CommonFileController {
 
     @RequestMapping("/download/{code}")
     @GlobalInterceptor(checkLogin = false, checkParams = true)
-    public void download(HttpServletRequest request, HttpServletResponse response, @PathVariable("code") @VerifyParam(required = true) String code) throws Exception {
+    public void download(HttpServletRequest request, HttpServletResponse response,
+                         @PathVariable("code") @VerifyParam(required = true) String code) throws Exception {
         super.download(request, response, code);
     }
 
     @RequestMapping("/createPublicDownloadUrl/{fileId}")
-    public ResponseVO createPublicDownloadUrl(@PathVariable("fileId") String fileId) {
+    @GlobalInterceptor(checkParams = true)
+    public ResponseVO createPublicDownloadUrl(@PathVariable("fileId") @VerifyParam(required = true) String fileId) {
         return super.createPublicDownloadUrl(fileId);
     }
 
     @RequestMapping("/publicDownload/{code}")
+    @GlobalInterceptor(checkLogin = false, checkParams = true)
     public void publicDownload(HttpServletRequest request, HttpServletResponse response,
-                               @PathVariable("code") String code) throws Exception {
+                               @PathVariable("code") @VerifyParam(required = true) String code) throws Exception {
         super.publicDownload(request, response, code);
     }
 
