@@ -64,7 +64,6 @@
       item.menuCode == currentMenu.menuCode ? 'active' : '',
     ]"
             >
-              <!-- 判断是否是svgIcon -->
               <template v-if="item.svgIcon">
   <span class="custom-svg">
     <svg
@@ -204,12 +203,6 @@ const menus = [
         category: "all",
         path: "/main/all",
       },
-      /*{
-        icon: "video",
-        name: "视频",
-        category: "video",
-        path: "/main/video",
-      },*/
       {
         icon: "music",
         name: "音频",

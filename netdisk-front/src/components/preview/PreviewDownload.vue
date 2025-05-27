@@ -42,9 +42,8 @@ const download = async () => {
   let result = await proxy.Request({
     url: props.createDownloadUrl,
   });
-  if (!result) {
-    return;
-  }
+  if (!result) return;
+
   window.location.href = props.downloadUrl + "/" + result.data;
 };
 </script>

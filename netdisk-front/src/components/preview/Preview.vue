@@ -27,11 +27,13 @@
       v-if="fileInfo.fileCategory == 2"
     ></PreviewMusic>
     <PreviewDownload
-      :createDownloadUrl="createDownloadUrl"
-      :downloadUrl="downloadUrl"
-      :fileInfo="fileInfo"
-      v-if="fileInfo.fileCategory == 5 && fileInfo.fileType != 8"
-    ></PreviewDownload>
+        :createDownloadUrl="createDownloadUrl"
+        :downloadUrl="downloadUrl"
+        :createPublicDownloadUrl="createPublicDownloadUrl"
+        :publicDownloadUrl="publicDownloadUrl"
+        :fileInfo="fileInfo"
+        v-if="fileInfo.fileCategory == 5 && fileInfo.fileType != 8"
+    />
   </Window>
 </template>
 
@@ -84,7 +86,8 @@ const FILE_URL_MAP = {
 const url = ref(null);
 const createDownloadUrl = ref(null);
 const downloadUrl = ref(null);
-
+const createPublicDownloadUrl = ref("/file/createPublicDownloadUrl");
+const publicDownloadUrl = ref("/api/file/publicDownload");
 const fileInfo = ref({});
 
 const imageViewerRef = ref();
@@ -97,11 +100,9 @@ const showPreview = (data, showPart) => {
     });
   } else {
     windowShow.value = true;
-    // 关键：优先使用外部传入的 url 字段（如 /file/getPublicFile/{fileId}）
     if (data.url) {
       url.value = data.url;
     } else {
-      // 兼容老逻辑，如果没传 url 则拼接默认的
       let _url = FILE_URL_MAP[showPart].fileUrl;
       if (data.fileCategory == 1) {
         _url = FILE_URL_MAP[showPart].videoUrl;
@@ -115,7 +116,7 @@ const showPreview = (data, showPart) => {
       }
       url.value = _url;
     }
-    // 下载相关参数保留原逻辑
+
     let _createDownloadUrl = FILE_URL_MAP[showPart].createDownloadUrl;
     let _downloadUrl = FILE_URL_MAP[showPart].downloadUrl;
     if (showPart == 0) {

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- 顶部操作区 -->
     <div class="top">
       <div class="top-op">
         <div class="btn">
@@ -117,7 +116,7 @@
         <div class="tips">未找到相关文件，请尝试其他关键词</div>
       </div>
     </div>
-    <!-- 预览 -->
+
     <Preview ref="previewRef" />
   </div>
 </template>

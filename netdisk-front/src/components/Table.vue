@@ -180,12 +180,12 @@ const handlePageNoChange = (pageNo) => {
   padding: 4px 0px;
 }
 :deep(.public-row) {
-  background-color: #71f499 !important;
+  background-color: #c6f1d3 !important;
 }
 .public-tag {
   display: inline-block;
-  background: #60e6b1;
-  color: #33a06f;
+  background: #c6efdf;
+  color: #aad1bf;
   font-size: 13px;
   border-radius: 8px;
   padding: 2px 8px;

@@ -97,9 +97,7 @@ public class CommonFileController extends ABaseController {
      * 预览公开文件（直链，无需登录，仅校验公开权限）
      */
     protected void getPublicFile(HttpServletResponse response, String fileId) {
-        // 1. 查询文件信息（只查fileId）
         FileInfo fileInfo = fileInfoService.getFileInfoByFileId(fileId);
-        // 2. 权限校验：公开+只读+不是文件夹
         if (fileInfo == null
                 || !Integer.valueOf(1).equals(fileInfo.getPermission())
                 || !Integer.valueOf(0).equals(fileInfo.getAccessType())
@@ -107,7 +105,6 @@ public class CommonFileController extends ABaseController {
             response.setStatus(403);
             return;
         }
-        // 3. 计算本地文件路径（兼容ts、m3u8、普通文件）
         String filePath;
         if (fileId.endsWith(".ts")) {
             String[] tsArray = fileId.split("_");
@@ -133,7 +130,6 @@ public class CommonFileController extends ABaseController {
             response.setStatus(404);
             return;
         }
-        // 4. 设置 Content-Type 和 Content-Disposition
         String fileName = fileInfo.getFileName();
         String fileSuffix = StringTools.getFileSuffix(fileName);
         if (fileSuffix != null && (fileSuffix.equalsIgnoreCase(".png") || fileSuffix.equalsIgnoreCase(".jpg") ||
@@ -145,7 +141,6 @@ public class CommonFileController extends ABaseController {
             response.setContentType("application/octet-stream");
         }
         response.setHeader("Content-Disposition", "inline;filename=\"" + fileName + "\"");
-        // 5. 输出文件流
         readFile(response, filePath);
     }
 
@@ -185,11 +180,10 @@ public class CommonFileController extends ABaseController {
         readFile(response, filePath);
     }
     protected ResponseVO createPublicDownloadUrl(String fileId) {
-        // 查询文件（不需要 userId，只需要 fileId，且必须是公开文件并非文件夹）
         FileInfo fileInfo = fileInfoService.getFileInfoByFileId(fileId);
         if (fileInfo == null
-                || !Integer.valueOf(1).equals(fileInfo.getPermission())   // 公开
-                || !Integer.valueOf(0).equals(fileInfo.getAccessType())   // 只读下载
+                || !Integer.valueOf(1).equals(fileInfo.getPermission())
+                || !Integer.valueOf(0).equals(fileInfo.getAccessType())
                 || FileFolderTypeEnums.FOLDER.getType().equals(fileInfo.getFolderType())) {
             throw new BusinessException(ResponseCodeEnum.CODE_600);
         }
@@ -208,18 +202,18 @@ public class CommonFileController extends ABaseController {
         DownloadFileDto downloadFileDto = redisComponent.getDownloadCode(code);
         if (downloadFileDto == null) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.setContentType("text/plain; charset=UTF-8");
+            response.setContentType("application/octet-stream; charset=UTF-8");
             response.getWriter().write("下载链接已失效或不存在");
             return;
         }
-        // 重新校验文件是否依然公开
+        // 重新校验文件是否公开
         FileInfo fileInfo = fileInfoService.getFileInfoByFileId(downloadFileDto.getFileId());
         if (fileInfo == null
                 || !Integer.valueOf(1).equals(fileInfo.getPermission())
                 || !Integer.valueOf(0).equals(fileInfo.getAccessType())
                 || FileFolderTypeEnums.FOLDER.getType().equals(fileInfo.getFolderType())) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.setContentType("text/plain; charset=UTF-8");
+            response.setContentType("application/octet-stream; charset=UTF-8");
             response.getWriter().write("文件未公开或已失效，无法下载");
             return;
         }
@@ -236,7 +230,7 @@ public class CommonFileController extends ABaseController {
         java.io.File file = new java.io.File(filePath);
         if (!file.exists()) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            response.setContentType("text/plain; charset=UTF-8");
+            response.setContentType("application/octet-stream; charset=UTF-8");
             response.getWriter().write("文件不存在");
             return;
         }

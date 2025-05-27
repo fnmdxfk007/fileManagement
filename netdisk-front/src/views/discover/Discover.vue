@@ -62,29 +62,6 @@
             </span>
           </div>
         </template>
-        <template #nickName="{ row }">
-          <span>{{ row.nickName }}</span>
-        </template>
-        <template #description="{ row }">
-          <div class="description-container">
-            <el-tooltip
-                :content="row.description || '暂无简介'"
-                placement="top"
-            >
-              <div class="description-text">
-                {{ row.description || '暂无简介' }}
-              </div>
-            </el-tooltip>
-          </div>
-        </template>
-        <template #lastUpdateTime="{ row }">
-          <span>{{ row.lastUpdateTime }}</span>
-        </template>
-        <template #fileSize="{ row }">
-          <span v-if="row.fileSize">
-            {{ proxy.Utils.size2Str(row.fileSize) }}
-          </span>
-        </template>
         <template #actions="{ row }">
           <span
               v-if="row.status === 2 && row.folderType === 0"
@@ -109,6 +86,30 @@
             预览
           </span>
         </template>
+        <template #nickName="{ row }">
+          <span>{{ row.nickName }}</span>
+        </template>
+        <template #description="{ row }">
+          <div class="description-container">
+            <el-tooltip
+                :content="row.description || '暂无简介'"
+                placement="top"
+            >
+              <div class="description-text">
+                {{ row.description || '暂无简介' }}
+              </div>
+            </el-tooltip>
+          </div>
+        </template>
+        <template #lastUpdateTime="{ row }">
+          <span>{{ row.lastUpdateTime }}</span>
+        </template>
+        <template #fileSize="{ row }">
+          <span v-if="row.fileSize">
+            {{ proxy.Utils.size2Str(row.fileSize) }}
+          </span>
+        </template>
+
       </Table>
     </div>
     <div class="no-data" v-else>
