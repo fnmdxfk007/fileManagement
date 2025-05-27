@@ -414,7 +414,6 @@ const loadDataList = async () => {
   tableData.value = result.data;
   if (Array.isArray(tableData.value.list)) {
     tableData.value.list.forEach(row => {
-      // 你的业务逻辑：permission=1且accessType=0为公开，其余为个人
       row._permissionStatus = (row.permission == 1 && row.accessType == 0) ? 1 : 0;
     });
   }
@@ -429,7 +428,6 @@ const showOp = (row) => {
   });
   row.showOp = true;
 };
-
 const cancelShowOp = (row) => {
   row.showOp = false;
 };

@@ -29,8 +29,6 @@
     <PreviewDownload
         :createDownloadUrl="createDownloadUrl"
         :downloadUrl="downloadUrl"
-        :createPublicDownloadUrl="createPublicDownloadUrl"
-        :publicDownloadUrl="publicDownloadUrl"
         :fileInfo="fileInfo"
         v-if="fileInfo.fileCategory == 5 && fileInfo.fileType != 8"
     />
@@ -82,19 +80,22 @@ const FILE_URL_MAP = {
     createDownloadUrl: "/showShare/createDownloadUrl",
     downloadUrl: "/api/showShare/download",
   },
+  3: {
+    fileUrl: "/file/getPublicFile",
+    videoUrl: "/file/ts/getVideoInfo",
+    createDownloadUrl: "/file/createPublicDownloadUrl",
+    downloadUrl: "/api/file/publicDownload",
+  }
 };
 const url = ref(null);
 const createDownloadUrl = ref(null);
 const downloadUrl = ref(null);
-const createPublicDownloadUrl = ref("/file/createPublicDownloadUrl");
-const publicDownloadUrl = ref("/api/file/publicDownload");
 const fileInfo = ref({});
 
 const imageViewerRef = ref();
 const showPreview = (data, showPart) => {
   fileInfo.value = data;
   if (data.fileCategory == 3) {
-    // 图片，直接展示图片预览
     nextTick(() => {
       imageViewerRef.value.show(0);
     });
@@ -108,11 +109,13 @@ const showPreview = (data, showPart) => {
         _url = FILE_URL_MAP[showPart].videoUrl;
       }
       if (showPart == 0) {
-        _url = _url + "/" + data.fileId;
+        _url += "/" + data.fileId;
       } else if (showPart == 1) {
-        _url = _url + "/" + data.userId + "/" + data.fileId;
+        _url += "/" + data.userId + "/" + data.fileId;
       } else if (showPart == 2) {
-        _url = _url + "/" + data.shareId + "/" + data.fileId;
+        _url += "/" + data.shareId + "/" + data.fileId;
+      } else if (showPart == 3) {
+        _url += "/" + data.fileId;
       }
       url.value = _url;
     }
@@ -120,14 +123,18 @@ const showPreview = (data, showPart) => {
     let _createDownloadUrl = FILE_URL_MAP[showPart].createDownloadUrl;
     let _downloadUrl = FILE_URL_MAP[showPart].downloadUrl;
     if (showPart == 0) {
-      _createDownloadUrl = _createDownloadUrl + "/" + data.fileId;
+      _createDownloadUrl += "/" + data.fileId;
     } else if (showPart == 1) {
-      _createDownloadUrl = _createDownloadUrl + "/" + data.userId + "/" + data.fileId;
+      _createDownloadUrl += "/" + data.userId + "/" + data.fileId;
     } else if (showPart == 2) {
-      _createDownloadUrl = _createDownloadUrl + "/" + data.shareId + "/" + data.fileId;
+      _createDownloadUrl += "/" + data.shareId + "/" + data.fileId;
+    } else if (showPart == 3) {
+      _createDownloadUrl += "/" + data.fileId;
     }
     createDownloadUrl.value = _createDownloadUrl;
     downloadUrl.value = _downloadUrl;
+    // 打印调试
+    console.log('showPart:', showPart, 'createDownloadUrl:', _createDownloadUrl, 'downloadUrl:', _downloadUrl);
   }
 };
 defineExpose({ showPreview });

@@ -225,18 +225,17 @@ const cancelShowOp = (row) => {
 const previewRef = ref();
 const navigationRef = ref();
 
-const preview = (row) => {
-  if (row.folderType == 1) {
-    navigationRef.value.openFolder?.(row);
+const preview = (data) => {
+  console.log('[Discover] preview row', data);
+  if (data.folderType == 1) {
+    navigationRef.value.openFolder(data);
     return;
   }
-  if (row.status != 2) {
+  if (data.status != 2) {
     proxy.Message.warning("文件正在转码中，无法预览");
     return;
   }
-  // 传递后端直链到 Preview 组件
-  const fileUrl = `/file/getPublicFile/${row.fileId}`;
-  previewRef.value.showPreview({ ...row, url: fileUrl }, 0);
+  previewRef.value.showPreview(data, 3);
 };
 const navChange = (data) => {
   const {curFolder} = data;
