@@ -19,7 +19,7 @@ export default defineConfig({
     hmr: true,
     proxy: {
       "/api": {
-        target: "http://localhost:9090",
+        target: "http://127.0.0.1:9090",
         changeOrigin: true,
         pathRewrite: {
           "^api": "/api"

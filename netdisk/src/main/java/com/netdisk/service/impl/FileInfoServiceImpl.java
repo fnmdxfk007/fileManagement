@@ -262,7 +262,7 @@ public class FileInfoServiceImpl implements FileInfoService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UploadResultDto uploadFile(SessionWebUserDto webUserDto, String fileId, MultipartFile file, String fileName, String filePid, String fileMd5,
-                                      Integer chunkIndex, Integer chunks,Integer permission,Integer accessType,String description) {
+                                      Integer chunkIndex, Integer chunks,Integer permission, Integer accessType, String description) {
         File tempFileFolder = null;
         Boolean uploadSuccess = true;
         try {

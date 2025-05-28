@@ -38,28 +38,28 @@ import java.util.List;
  */
 public class GlobalOperationAspect {
 
-    // 日志记录器
+    //日志记录器
     private static Logger logger = LoggerFactory.getLogger(GlobalOperationAspect.class);
 
-    // 定义常见类型的全限定名
+    //定义常见类型的全限定名
     private static final String TYPE_STRING = "java.lang.String";
     private static final String TYPE_INTEGER = "java.lang.Integer";
     private static final String TYPE_LONG = "java.lang.Long";
 
-    // 用户信息服务
+    //用户信息服务
     @Resource
     private UserInfoService userInfoService;
 
-    // 应用配置
+    //应用配置
     @Resource
     private AppConfig appConfig;
 
-    // 定义切点，拦截带有@GlobalInterceptor注解的方法
+    //定义切点，拦截带有@GlobalInterceptor注解的方法
     @Pointcut("@annotation(com.netdisk.annotation.GlobalInterceptor)")
     private void requestInterceptor() {
     }
 
-    // 在目标方法执行前进行拦截处理
+    //在目标方法执行前进行拦截处理
     @Before("requestInterceptor()")
     public void interceptorDo(JoinPoint point) throws BusinessException {
         try {
@@ -99,12 +99,10 @@ public class GlobalOperationAspect {
 
     // 校验登录状态
     private void checkLogin(Boolean checkAdmin) {
-        // 获取当前请求和会话
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
         SessionWebUserDto sessionUser = (SessionWebUserDto) session.getAttribute(Constants.SESSION_KEY);
 
-        // 开发环境下自动登录
         if (sessionUser == null && appConfig.getDev() != null && appConfig.getDev()) {
             List<UserInfo> userInfoList = userInfoService.findListByParam(new UserInfoQuery());
             if (!userInfoList.isEmpty()) {
@@ -117,18 +115,18 @@ public class GlobalOperationAspect {
             }
         }
 
-        // 未登录抛出异常
+        //未登录抛出异常
         if (null == sessionUser) {
             throw new BusinessException(ResponseCodeEnum.CODE_901);
         }
 
-        // 需要管理员权限但当前用户不是管理员
+        //需要管理员权限但当前用户不是管理员
         if (checkAdmin && !sessionUser.getAdmin()) {
             throw new BusinessException(ResponseCodeEnum.CODE_404);
         }
     }
 
-    // 校验方法参数
+    //校验方法参数
     private void validateParams(Method m, Object[] arguments) throws BusinessException {
         Parameter[] parameters = m.getParameters();
         for (int i = 0; i < parameters.length; i++) {
@@ -178,25 +176,23 @@ public class GlobalOperationAspect {
         }
     }
 
-    // 校验单个值
+    //校验单个值
     private void checkValue(Object value, VerifyParam verifyParam) throws BusinessException {
-        // 判断是否为空
+        //判断是否为空
         Boolean isEmpty = value == null || StringTools.isEmpty(value.toString());
         // 获取值的长度
         Integer length = value == null ? 0 : value.toString().length();
 
-        // 校验必填
+        //校验必填
         if (isEmpty && verifyParam.required()) {
             throw new BusinessException(ResponseCodeEnum.CODE_600);
         }
-
-        // 校验长度
+        //校验长度
         if (!isEmpty && (verifyParam.max() != -1 && verifyParam.max() < length || 
                          verifyParam.min() != -1 && verifyParam.min() > length)) {
             throw new BusinessException(ResponseCodeEnum.CODE_600);
         }
-
-        // 校验正则表达式
+        //校验正则表达式
         if (!isEmpty && !StringTools.isEmpty(verifyParam.regex().getRegex()) && 
             !VerifyUtils.verify(verifyParam.regex(), String.valueOf(value))) {
             throw new BusinessException(ResponseCodeEnum.CODE_600);

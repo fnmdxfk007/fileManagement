@@ -21,7 +21,7 @@ public class FileCollectController extends CommonFileController {
     private FileCollectService fileCollectService;
 
     /**
-     * 批量收藏文件（递归收藏所有子目录/子文件）
+     * 批量收藏文件
      */
     @RequestMapping("/setCollect")
     public ResponseVO setCollect(HttpSession session,
@@ -33,7 +33,7 @@ public class FileCollectController extends CommonFileController {
     }
 
     /**
-     * 批量取消收藏文件（递归取消所有子目录/子文件）
+     * 批量取消收藏文件
      */
     @RequestMapping("/delCollect")
     public ResponseVO delCollect(HttpSession session,

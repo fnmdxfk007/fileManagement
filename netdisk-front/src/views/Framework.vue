@@ -234,6 +234,7 @@ const menus = [
     icon: "search",
     name: "发现文件",
     menuCode: "discover",
+    tips: "可在发现文件中查找需要公开的文件",
     allShow: true,
     children: [
       {
@@ -248,6 +249,7 @@ const menus = [
     svgIcon: true,
     name: "我的收藏",
     menuCode: "collect",
+    tips: "已收藏的公开文件都在这里啦",
     allShow: true,
     children: [
       {

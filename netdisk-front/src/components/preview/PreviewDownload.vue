@@ -39,6 +39,11 @@ const props = defineProps({
 
 //下载文件
 const download = async () => {
+  console.log('[PreviewDownload] Downloading with:', {
+    createDownloadUrl: props.createDownloadUrl,
+    downloadUrl: props.downloadUrl,
+    fileInfo: props.fileInfo
+  });
   let result = await proxy.Request({
     url: props.createDownloadUrl,
   });
