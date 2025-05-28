@@ -27,23 +27,23 @@
       v-if="fileInfo.fileCategory == 2"
     ></PreviewMusic>
     <PreviewDownload
-        :createDownloadUrl="createDownloadUrl"
-        :downloadUrl="downloadUrl"
-        :fileInfo="fileInfo"
-        v-if="fileInfo.fileCategory == 5 && fileInfo.fileType != 8"
-    />
+      :createDownloadUrl="createDownloadUrl"
+      :downloadUrl="downloadUrl"
+      :fileInfo="fileInfo"
+      v-if="fileInfo.fileCategory == 5 && fileInfo.fileType != 8"
+    ></PreviewDownload>
   </Window>
 </template>
 
 <script setup>
 import PreviewDoc from "@/components/preview/PreviewDoc.vue";
+import PreviewDownload from "@/components/preview/PreviewDownload.vue";
 import PreviewExcel from "@/components/preview/PreviewExcel.vue";
 import PreviewImage from "@/components/preview/PreviewImage.vue";
+import PreviewMusic from "@/components/preview/PreviewMusic.vue"
 import PreviewPdf from "@/components/preview/PreviewPdf.vue";
-import PreviewVideo from "@/components/preview/PreviewVideo.vue";
 import PreviewTxt from "@/components/preview/PreviewTxt.vue";
-import PreviewDownload from "@/components/preview/PreviewDownload.vue";
-import PreviewMusic from "@/components/preview/PreviewMusic.vue";
+import PreviewVideo from "@/components/preview/PreviewVideo.vue";
 
 import { ref, reactive, getCurrentInstance, nextTick, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
@@ -53,7 +53,7 @@ const route = useRoute();
 
 const imageUrl = computed(() => {
   return (
-    proxy.globalInfo.imageUrl + fileInfo.value.fileCover.replaceAll("_.", ".")
+      proxy.globalInfo.imageUrl + fileInfo.value.fileCover.replaceAll("_.", ".")
   );
 });
 
@@ -133,7 +133,6 @@ const showPreview = (data, showPart) => {
     }
     createDownloadUrl.value = _createDownloadUrl;
     downloadUrl.value = _downloadUrl;
-    // 打印调试
     console.log('showPart:', showPart, 'createDownloadUrl:', _createDownloadUrl, 'downloadUrl:', _downloadUrl);
   }
 };

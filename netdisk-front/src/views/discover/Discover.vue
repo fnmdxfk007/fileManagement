@@ -198,8 +198,8 @@ const tableOptions = {
 
 const api = {
   loadPublicFileList: "/file/loadPublicFileList",
-  createPublicDownloadUrl: "/file/createPublicDownloadUrl",
-  publicDownload: "/api/file/publicDownload",
+  createDownloadUrl: "/file/createPublicDownloadUrl",
+  downloadUrl: "/api/file/publicDownload",
   setCollect: "/file/setCollect",
 
 };
@@ -245,12 +245,12 @@ const navChange = (data) => {
 
 const download = async (row) => {
   let result = await proxy.Request({
-    url: api.createPublicDownloadUrl + "/" + row.fileId,
+    url: api.createDownloadUrl + "/" + row.fileId,
   });
   if (!result) {
     return;
   }
-  window.location.href = api.publicDownload + "/" + result.data;
+  window.location.href = api.downloadUrl + "/" + result.data;
 };
 
 const rowSelected = (rows) => {
@@ -285,7 +285,7 @@ const loadPublicFileList = async () => {
     pageNo: tableData.value.pageNo,
     pageSize: tableData.value.pageSize,
     fileNameFuzzy: fileNameFuzzy.value,
-    filePid: currentFolder.value.fileId, // 当前文件夹 ID
+    filePid: currentFolder.value.fileId,
   };
   const result = await proxy.Request({
     url: api.loadPublicFileList,
@@ -304,7 +304,6 @@ const search = () => {
   loadPublicFileList();
 };
 
-// 初始化加载数据
 loadPublicFileList();
 </script>
 

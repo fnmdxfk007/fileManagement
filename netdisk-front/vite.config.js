@@ -15,11 +15,11 @@ export default defineConfig({
     }
   },
   server: {
-    port: 2025,
+    port: 3025,
     hmr: true,
     proxy: {
       "/api": {
-        target: "http://localhost:9090",
+        target: "http://127.0.0.1:7070",
         changeOrigin: true,
         pathRewrite: {
           "^api": "/api"
