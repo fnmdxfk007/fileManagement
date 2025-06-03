@@ -270,7 +270,7 @@ const fileAccept = computed(() => {
   return categoryItem ? categoryItem.accept : "*";
 });
 
-//列表   首页的设置
+//列表首页的设置
 const columns = [
   {
     label: "文件名",
@@ -307,7 +307,7 @@ const confirmBatchSetPermission = (type) => {
       }
   );
 };
-// 多文件状态切换
+//多文件状态切换
 const batchSetPermission = async (type) => {
   if (selectFileIdList.value.length == 0) return;
   let permission = type === "public" ? 1 : 0;
@@ -339,13 +339,13 @@ const batchSetPermission = async (type) => {
 const tableRowClassName = ({ row }) => {
   return row.permission == 1 && row.accessType == 0 ? 'public-row' : '';
 };
-// 简介部分
+//简介部分
 const editDescription = (row) => {
-  row.originalDescription = row.description; // 保存原始值用于取消时回滚
+  row.originalDescription = row.description; //保存原始值用于取消时回滚
   row.editing = true;
   nextTick(() => {
     row.inputRef?.focus();
-    row.inputRef?.select(); // 直接通过动态 ref 操作输入框
+    row.inputRef?.select(); //直接通过动态 ref 操作输入框
   });
 };
 const saveDescription = async (row) => {
@@ -357,8 +357,6 @@ const saveDescription = async (row) => {
     proxy.Message.error("文件ID不能为空！");
     return;
   }
-
-  // 每次都新建一个 FormData 实例
   const formData = new FormData();
   formData.append('fileId', row.fileId.toString());
   formData.append('description', row.description ?? '');

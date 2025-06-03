@@ -59,6 +59,15 @@
             <span class="file-name" :title="row.fileName" @click="preview(row)">
               {{ row.fileName }}
             </span>
+            <span class="op" >
+              <template v-if="row.showOp && row.fileId && row.status == 2">
+                <span
+                  class="iconfont icon-download"
+                  @click="download(row)"
+                  v-if="row.folderType == 0"
+                  >下载</span>
+              </template>
+            </span>
           </div>
         </template>
         <template #nickName="{ row }">
@@ -82,30 +91,6 @@
         <template #fileSize="{ row }">
           <span v-if="row.fileSize">
             {{ proxy.Utils.size2Str(row.fileSize) }}
-          </span>
-        </template>
-        <template #actions="{ row }">
-          <span
-              v-if="row.status === 2 && row.folderType === 0"
-              class="iconfont icon-download action-icon"
-              @click="download(row)"
-              @mouseenter="hoverAction = row.fileId"
-              @mouseleave="hoverAction = ''"
-              :class="{ 'is-hover': hoverAction === row.fileId }"
-              style="margin-left: 8px;"
-          >
-            下载
-          </span>
-          <span
-              v-if="row.status === 2 && row.folderType === 0"
-              class="iconfont icon-preview action-icon"
-              @click="preview(row)"
-              @mouseenter="hoverPreview = row.fileId"
-              @mouseleave="hoverPreview = ''"
-              :class="{ 'is-hover': hoverPreview === row.fileId }"
-              style="margin-left: 16px;"
-          >
-            预览
           </span>
         </template>
       </Table>
@@ -171,13 +156,6 @@ const columns = [
     prop: "fileSize",
     scopedSlots: "fileSize",
     width: 150,
-    align: "center",
-  },
-  {
-    label: "操作",
-    prop: "actions",
-    scopedSlots: "actions",
-    width: 140,
     align: "center",
   },
 ];
@@ -306,6 +284,15 @@ loadCollectPublicFileList();
 </script>
 
 <style scoped>
+@import "@/assets/file.list.scss";
+.file-list {
+  margin-top: 10px;
+  .file-item {
+    .op {
+      width: 120px;
+    }
+  }
+}
 .top {
   display: flex;
   flex-direction: column;
@@ -364,18 +351,6 @@ loadCollectPublicFileList();
 }
 
 .file-name:hover {
-  color: #409eff;
-  text-decoration: none;
-}
-
-.action-icon {
-  cursor: pointer;
-  color: #606266;
-  transition: color 0.2s;
-}
-
-.action-icon.is-hover,
-.action-icon:hover {
   color: #409eff;
   text-decoration: none;
 }

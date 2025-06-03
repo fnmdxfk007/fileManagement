@@ -5,10 +5,11 @@
       <div class="top-op">
         <div class="btn">
           <el-button
-              type="primary"
-              class="btn-setCollect"
-              :disabled="selectFileIdList.length === 0"
-              @click="confireSetCollect">
+            type="primary"
+            class="btn-setCollect"
+            :disabled="selectFileIdList.length === 0"
+            @click="confireSetCollect"
+          >
             <span class="iconfont icon-setCollect"></span>
             批量收藏
           </el-button>
@@ -16,12 +17,11 @@
         <div class="search-refresh-group">
           <div class="search-panel-discover">
             <el-input
-                clearable
-                placeholder="输入文件名搜索"
-                v-model="fileNameFuzzy"
-                @keyup.enter="search"
-                class="file-search-input"
-                style=""
+              clearable
+              placeholder="输入文件名搜索"
+              v-model="fileNameFuzzy"
+              @keyup.enter="search"
+              class="file-search-input"
             >
               <template #suffix>
                 <i class="iconfont icon-search" @click="search"></i>
@@ -36,20 +36,20 @@
     </div>
     <div class="file-list" v-if="tableData.list && tableData.list.length > 0">
       <Table
-          ref="dataTableRef"
-          :columns="columns"
-          :showPagination="true"
-          :dataSource="tableData"
-          :fetch="loadPublicFileList"
-          :initFetch="false"
-          :options="tableOptions"
-          @rowSelected="rowSelected"
+        ref="dataTableRef"
+        :columns="columns"
+        :showPagination="true"
+        :dataSource="tableData"
+        :fetch="loadPublicFileList"
+        :initFetch="false"
+        :options="tableOptions"
+        @rowSelected="rowSelected"
       >
         <template #fileName="{ row }">
           <div
-              class="file-item"
-              @mouseenter="showOp(row)"
-              @mouseleave="cancelShowOp(row)"
+            class="file-item"
+            @mouseenter="showOp(row)"
+            @mouseleave="cancelShowOp(row)"
           >
             <template v-if="row.folderType === 1">
               <icon :fileType="0"></icon>
@@ -57,34 +57,23 @@
             <template v-else>
               <icon :fileType="row.fileType"></icon>
             </template>
-            <span class="file-name" :title="row.fileName" @click="preview(row)">
+            <span
+              class="file-name"
+              :title="row.fileName"
+              @click="preview(row)"
+            >
               {{ row.fileName }}
             </span>
+            <span class="op" >
+              <template v-if="row.showOp && row.fileId && row.status == 2">
+                <span
+                  class="iconfont icon-download"
+                  @click="download(row)"
+                  v-if="row.folderType == 0"
+                  >下载</span>
+              </template>
+            </span>
           </div>
-        </template>
-        <template #actions="{ row }">
-          <span
-              v-if="row.status === 2 && row.folderType === 0"
-              class="iconfont icon-download action-icon"
-              @click="download(row)"
-              @mouseenter="hoverAction = row.fileId"
-              @mouseleave="hoverAction = ''"
-              :class="{ 'is-hover': hoverAction === row.fileId }"
-              style="margin-left: 8px;"
-          >
-            下载
-          </span>
-          <span
-              v-if="row.status === 2 && row.folderType === 0"
-              class="iconfont icon-preview action-icon"
-              @click="preview(row)"
-              @mouseenter="hoverPreview = row.fileId"
-              @mouseleave="hoverPreview = ''"
-              :class="{ 'is-hover': hoverPreview === row.fileId }"
-              style="margin-left: 16px;"
-          >
-            预览
-          </span>
         </template>
         <template #nickName="{ row }">
           <span>{{ row.nickName }}</span>
@@ -92,8 +81,8 @@
         <template #description="{ row }">
           <div class="description-container">
             <el-tooltip
-                :content="row.description || '暂无简介'"
-                placement="top"
+              :content="row.description || '暂无简介'"
+              placement="top"
             >
               <div class="description-text">
                 {{ row.description || '暂无简介' }}
@@ -109,7 +98,6 @@
             {{ proxy.Utils.size2Str(row.fileSize) }}
           </span>
         </template>
-
       </Table>
     </div>
     <div class="no-data" v-else>
@@ -123,22 +111,19 @@
   </div>
 </template>
 
-
 <script setup>
-import {ref, getCurrentInstance} from "vue";
-import {useRouter, useRoute} from "vue-router";
+import { ref, getCurrentInstance } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import Preview from "@/components/preview/Preview.vue";
 import Navigation from "@/components/Navigation.vue";
 import Icon from "@/components/Icon.vue";
 
-const {proxy} = getCurrentInstance();
+const { proxy } = getCurrentInstance();
 const router = useRouter();
 const route = useRoute();
 
 const fileNameFuzzy = ref("");
-const currentFolder = ref({fileId: "0"});
-const hoverAction = ref("");
-const hoverPreview = ref("");
+const currentFolder = ref({ fileId: "0" });
 const selectFileIdList = ref([]);
 
 const columns = [
@@ -175,13 +160,6 @@ const columns = [
     width: 150,
     align: "center",
   },
-  {
-    label: "操作",
-    prop: "actions",
-    scopedSlots: "actions",
-    width: 140,
-    align: "center",
-  },
 ];
 
 const tableData = ref({
@@ -189,7 +167,7 @@ const tableData = ref({
   pageNo: 1,
   pageSize: 15,
   pageTotal: 1,
-  total: 0
+  total: 0,
 });
 const tableOptions = {
   extHeight: 50,
@@ -201,15 +179,11 @@ const api = {
   createDownloadUrl: "/file/createPublicDownloadUrl",
   downloadUrl: "/api/file/publicDownload",
   setCollect: "/file/setCollect",
-
 };
 const confireSetCollect = (type) => {
-  proxy.Confirm(
-      `是否将这些文件设为收藏？`,
-      async () => {
-        await setCollect(type);
-      }
-  );
+  proxy.Confirm(`是否将这些文件设为收藏？`, async () => {
+    await setCollect(type);
+  });
 };
 const showOp = (row) => {
   tableData.value.list.forEach((element) => {
@@ -217,16 +191,14 @@ const showOp = (row) => {
   });
   row.showOp = true;
 };
-
 const cancelShowOp = (row) => {
   row.showOp = false;
 };
-
 const previewRef = ref();
 const navigationRef = ref();
 
 const preview = (data) => {
-  console.log('[Discover] preview row', data);
+  // 文件夹点击进入
   if (data.folderType == 1) {
     navigationRef.value.openFolder(data);
     return;
@@ -237,9 +209,10 @@ const preview = (data) => {
   }
   previewRef.value.showPreview(data, 3);
 };
+
 const navChange = (data) => {
-  const {curFolder} = data;
-  currentFolder.value = curFolder || {fileId: "0"};
+  const { curFolder } = data;
+  currentFolder.value = curFolder || { fileId: "0" };
   loadPublicFileList();
 };
 
@@ -262,7 +235,6 @@ const rowSelected = (rows) => {
 
 // 批量收藏
 const setCollect = async () => {
-  console.log('fileIds:', selectFileIdList.value.join(","));
   if (selectFileIdList.value.length === 0) {
     proxy.Message.warning("请先选择要收藏的文件");
     return;
@@ -270,8 +242,8 @@ const setCollect = async () => {
   const result = await proxy.Request({
     url: api.setCollect,
     params: {
-      fileIds: selectFileIdList.value.join(",")
-    }
+      fileIds: selectFileIdList.value.join(","),
+    },
   });
   if (result && result.code === 200) {
     proxy.Message.success("收藏成功！");
@@ -308,6 +280,15 @@ loadPublicFileList();
 </script>
 
 <style scoped>
+@import "@/assets/file.list.scss";
+.file-list {
+  margin-top: 10px;
+  .file-item {
+    .op {
+      width: 120px;
+    }
+  }
+}
 .top {
   display: flex;
   flex-direction: column;
@@ -362,18 +343,6 @@ loadPublicFileList();
 }
 
 .file-name:hover {
-  color: #409eff;
-  text-decoration: none;
-}
-
-.action-icon {
-  cursor: pointer;
-  color: #606266;
-  transition: color 0.2s;
-}
-
-.action-icon.is-hover,
-.action-icon:hover {
   color: #409eff;
   text-decoration: none;
 }
