@@ -188,6 +188,9 @@ public class FileInfoController extends CommonFileController {
         return getSuccessResponseVO(fileInfo);
     }
 
+    /**
+    * 获取文件目录
+    */
     @RequestMapping("/getFolderInfo")
     @GlobalInterceptor(checkParams = true)
     public ResponseVO getFolderInfo(HttpSession session, @VerifyParam(required = true) String path) {
